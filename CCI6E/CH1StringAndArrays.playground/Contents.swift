@@ -81,6 +81,9 @@ extension String {
         return str.charactersCount == charactersCount
     }
 
+    /**
+        O(N)
+     */
     var charactersCount: [Character: Int] {
         var tmp: [Character : Int] = [:]
         for ch in self {
@@ -143,4 +146,63 @@ print(s2.isPalindromePermutations(of: s1))
  1.5 There are three types of characeter edits on strings: insert, replace, or delete.
  Write a function to return if one string is 0 or 1 edit away from the other
  */
+
+
+extension String {
+    func isAwayZeroOrOneEdit(from str: String) -> Bool {
+        guard self != str else {
+            return true
+        }
+
+        var c1 = charactersCount
+        var c2 = str.charactersCount
+        var (longer, shorter) = count > str.count ? (c1, c2) : (c2, c1)
+
+            var countCommon = 0
+            var diffs = 0
+            for ch in shorter.keys {
+                if let _ = longer[ch] {
+                    countCommon += 1
+                } else {
+                    diffs += 1
+                }
+            }
+            return (countCommon == shorter.count || diffs <= 1)
+
+        return false
+    }
+}
+
+
+print("TASK 1.5\n")
+s1 = "pale"
+s2 = "ple"
+
+print(s2.isAwayZeroOrOneEdit(from: s1))
+
+s1 = "pale"
+s2 = "pale"
+
+print(s2.isAwayZeroOrOneEdit(from: s1))
+
+s1 = "pale"
+s2 = "pales"
+
+print(s2.isAwayZeroOrOneEdit(from: s1))
+
+s1 = "pale"
+s2 = "bake"
+
+print(s2.isAwayZeroOrOneEdit(from: s1))
+
+s1 = "pale"
+s2 = "bale"
+
+print(s2.isAwayZeroOrOneEdit(from: s1))
+
+s1 = "pale"
+s2 = "chomog"
+
+print(s2.isAwayZeroOrOneEdit(from: s1))
+
 
