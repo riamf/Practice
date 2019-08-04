@@ -33,7 +33,6 @@ class LinkedList<T> where T: Equatable {
         var items = 0
         var item: LinkedList<T>? = self
         while item != nil {
-            print(item!.data)
             item = item?.next
             items += 1
         }
@@ -103,6 +102,19 @@ func removeDuplicated<T: Hashable>(from start: LinkedList<T>) -> LinkedList<T>? 
     return start
 }
 
+func getRandomIntList(n: Int = 20, from: Int = 5) -> LinkedList<Int>? {
+    var start: LinkedList<Int>? = nil
+    for rng in (0..<n).compactMap({ _ -> Int? in (0...from).randomElement() }) {
+        if start == nil {
+            start = LinkedList(data: rng)
+        } else {
+            start?.append(data: rng)
+        }
+    }
+
+    return start
+}
+
 print("TASK 2.1")
 
 start = nil
@@ -117,3 +129,43 @@ for rng in (0..<20).compactMap({ _ -> Int? in (0...5).randomElement() }) {
 start?.printAll()
 start = removeDuplicated(from: start!)
 start?.printAll()
+
+print("TASK 2.2")
+
+start = getRandomIntList()
+start?.printAll()
+
+func kthElement(k: Int, start: LinkedList<Int>?) -> Int {
+
+    var current: LinkedList<Int>? = start
+    let size = start?.count() // O(N)
+    let maxIters = size! - k
+    var count = 0
+    while current?.next != nil {
+        if count == maxIters {
+            return current!.data
+        }
+        count+=1
+        current = current?.next
+    }
+
+    fatalError()
+}
+
+print(kthElement(k: 4, start: start))
+
+func recurentKth(k: Int, start: LinkedList<Int>?, pos: Int) -> Int {
+    if start == nil {
+        return 0
+    } else {
+        let val = recurentKth(k: k, start: start?.next, pos: pos + 1) + 1
+        if val == k {
+            print(start!.data)
+        }
+
+        return val
+    }
+}
+
+let count = recurentKth(k: 4, start: start, pos: 0)
+
