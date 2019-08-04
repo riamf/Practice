@@ -206,3 +206,150 @@ s2 = "chomog"
 print(s2.isAwayZeroOrOneEdit(from: s1))
 
 
+/*:
+ 1.6 Implement basic string compression using the counts of repeated characters.
+ If the compressed string is not smaller than the original, return the original.
+ You can assume the string has only characters a-z \
+ `aabcccccaaa -> a2b1c5a3`
+ */
+
+extension String {
+    var compressed: String {
+
+        guard count > 0 else { return self }
+        var result = ""
+
+        var last = self[startIndex]
+
+        var memchar: Character = self[startIndex]
+        var counter = 0
+
+        for ch in self {
+            if ch == memchar {
+                counter += 1
+            } else {
+                result += "\(memchar)\(counter)"
+
+                counter = 1
+                memchar = ch
+            }
+        }
+        result += "\(memchar)\(counter)"
+
+
+        if result.count >= count {
+            return self
+        } else {
+            return result
+        }
+    }
+}
+
+print("aabcccccaaafbb".compressed)
+
+/*:
+ 1.7 Rotate an NxN matrix
+ */
+
+func rotate(_ a: [[Int]]) -> [[Int]] {
+
+    var tmp = [Int]()
+    for row in a {
+        tmp += row
+    }
+
+    var res2 = (0..<tmp.count).map({_ in return 0})
+    let n = tmp.count
+//    print(tmp)
+    var rowCounter = 0
+    var stepMultiplier = 0
+    for (i, v) in tmp.enumerated() {
+
+        if rowCounter % a.count == 0 && rowCounter > 0 {
+            stepMultiplier += 1
+        }
+        rowCounter += 1
+
+        var fin = ((i * a.count) + ((a.count - 1) - stepMultiplier)) % tmp.count
+
+//        print("\(i) \(fin)   \(stepMultiplier)")
+        if fin >= n {
+            continue
+        }
+
+
+        res2[fin] = tmp[i]
+    }
+
+    var result = [[Int]]()
+
+    for i in (0..<a.count) {
+        var start = (i * a.count)
+        var end = (start + a.count)
+        print("\(start)...\(end)")
+
+        let val = Array(res2[start..<end])
+        result.append(val)
+    }
+    return result
+}
+
+func rotated2nd(_ a: [[Int]]) -> [[Int]] {
+
+    guard a.first?.count == a.count else {
+        fatalError("Should be NxN")
+    }
+
+    var result = (0..<a.count).map{ _ -> [Int] in return (0..<a.count).map({ _ -> Int in return 0 }) }
+
+
+    let reversedIndex = (0..<a.count).reversed()
+    for col in reversedIndex {
+        for row in (0..<a.count) {
+            let idx = a.count - col - 1
+            result[row][col] = a[idx][row]
+        }
+    }
+
+    return result
+}
+
+func print(_ a: [[Int]]) {
+    for (i, row) in a.enumerated() {
+        if i == 0 {
+            print("[\(row)")
+        } else if i == a.count - 1 {
+            print(" \(row)]")
+        } else {
+            print(" \(row)")
+        }
+    }
+}
+
+var matrix = [[1, 2, 3, 4], [5, 6, 7, 8], [9, 10, 11, 12], [13, 14, 15, 16]]
+
+//1  2  3  4
+//5  6  7  8
+//9 10 11 12
+//13 14 15 16
+//
+//13 9 5 1
+//14 10 6 2
+//15 11 7 3
+//16 12 8 4
+//1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16
+//13 9 5 1 14 10 6 2 15 11 7 3 16 12 8 4
+//0 1 2 3
+//3 7 11 15
+
+let rotated = rotate(matrix)
+print(rotated)
+let rotated2 = rotated2nd(matrix)
+print(rotated2)
+print(rotated == rotated2)
+
+
+
+
+
+
