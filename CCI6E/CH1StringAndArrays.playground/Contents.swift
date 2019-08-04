@@ -349,7 +349,37 @@ print(rotated2)
 print(rotated == rotated2)
 
 
+/*:
+ 1.8 Tranform an MxN matrix such that if an element is 0 its column and row are zeroed
+ */
+
+func zeroedMatrix(_ a: [[Int]]) -> [[Int]] {
+    var result = [[Int]]()
+    var positions = [(row: Int, col: Int)]()
+    for row in (0..<a.count) {
+        result.append(a[row])
+        for col in (0..<a[row].count) {
+            if a[row][col] == 0 {
+                positions.append((row: row, col: col))
+            }
+        }
+    }
+
+    for (row, col) in positions {
+        for tcol in (0..<a[row].count) {
+            result[row][tcol] = 0
+        }
+        for trow in (0..<a.count) {
+            result[trow][col] = 0
+        }
+    }
+    return result
+}
 
 
 
+matrix = [[1, 2, 3, 4],  [5, 0, 7, 8],  [9, 10, 0, 12],  [13, 14, 15, 16]]
+print(matrix)
+let zeroed = zeroedMatrix(matrix)
+print(zeroed)
 
