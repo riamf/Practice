@@ -382,4 +382,19 @@ matrix = [[1, 2, 3, 4],  [5, 0, 7, 8],  [9, 10, 0, 12],  [13, 14, 15, 16]]
 print(matrix)
 let zeroed = zeroedMatrix(matrix)
 print(zeroed)
+/*:
+ 1.9 Write a function to determine if one string is a rotation of the other, using only
+ 1 call to a stdlib substring function
+ */
 
+extension String {
+    func isRotation(of: String) -> Bool {
+        return (self + self).contains(of)
+    }
+}
+
+let a = ""
+" ".isRotation(of: "")
+print("etcart".isRotation(of: "cartet"))
+print("cartet".isRotation(of: "etcart"))
+print("waterbottle".isRotation(of: "erbottlewat"))
