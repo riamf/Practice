@@ -171,7 +171,7 @@ func recurentKth(k: Int, start: LinkedList<Int>?, pos: Int) -> Int {
     }
 }
 
-let count = recurentKth(k: 4, start: start, pos: 0)
+var count = recurentKth(k: 4, start: start, pos: 0)
 
 /*
  * 2.3 delete middle node
@@ -199,3 +199,56 @@ func deleteMiddleNode(middle: LinkedList<Int>?) {
 deleteMiddleNode(middle: middle)
 start?.printAll()
 
+/*
+ * 2.4 Partition linked list around value x, all nodes less than x come before all nodes grater than x
+ */
+
+print("TASK 2.4")
+
+start = getRandomIntList(from: 100)
+
+count = start!.count()
+let randomNodeNumber = (0..<count).randomElement()!
+var randomNode = start
+counter = 0
+while randomNode?.next != nil {
+
+    if counter == randomNodeNumber {
+        break
+    }
+    counter += 1
+    randomNode = randomNode?.next
+}
+
+start?.printAll()
+print("X: \(randomNode!.data)")
+
+
+
+func partition(start: LinkedList<Int>?, randomNode: LinkedList<Int>?) -> LinkedList<Int>? {
+    var current = start
+    var low: LinkedList<Int>?
+    var high: LinkedList<Int>?
+    var lastLow: LinkedList<Int>?
+    while current != nil {
+        if current!.data < randomNode!.data {
+            if low == nil {
+                low = LinkedList<Int>(data: current!.data)
+            } else {
+                lastLow = low?.append(data: current!.data)
+            }
+        } else {
+            if high == nil {
+                high = LinkedList<Int>(data: current!.data)
+            } else {
+                high?.append(data: current!.data)
+            }
+        }
+        current = current?.next
+    }
+    lastLow?.next = high
+    return low
+}
+
+start = partition(start: start, randomNode: randomNode)
+start?.printAll()
