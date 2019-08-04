@@ -2,7 +2,7 @@ import UIKit
 
 class LinkedList<T> where T: Equatable {
     var next: LinkedList<T>?
-    let data: T
+    var data: T
 
     init(data: T) {
         self.data = data
@@ -130,6 +130,10 @@ start?.printAll()
 start = removeDuplicated(from: start!)
 start?.printAll()
 
+/*
+ * 2.2 Return kth element of a singl linked list
+ */
+
 print("TASK 2.2")
 
 start = getRandomIntList()
@@ -168,4 +172,30 @@ func recurentKth(k: Int, start: LinkedList<Int>?, pos: Int) -> Int {
 }
 
 let count = recurentKth(k: 4, start: start, pos: 0)
+
+/*
+ * 2.3 delete middle node
+ */
+
+print("TASK 2.3")
+
+start = getRandomIntList()
+start?.printAll()
+let middleCount = start!.count() / 2
+var middle = start
+var counter = 0
+while counter != middleCount {
+    counter+=1
+    middle = middle?.next
+}
+print(middleCount)
+print(middle!.data)
+func deleteMiddleNode(middle: LinkedList<Int>?) {
+    let next = middle?.next
+    middle!.data = next!.data
+    middle?.next = middle?.next?.next
+}
+
+deleteMiddleNode(middle: middle)
+start?.printAll()
 
