@@ -252,3 +252,59 @@ func partition(start: LinkedList<Int>?, randomNode: LinkedList<Int>?) -> LinkedL
 
 start = partition(start: start, randomNode: randomNode)
 start?.printAll()
+
+/*:
+ 2.5
+ Two numbers are represented by two singly linked lists in which each node is a digit.
+ The lists have the digits in reverse order, so that the 1's digit is at the head of the list.
+ Sum the two lists and return the result as a list — e.g.:
+
+ Input: `7 -> 1 -> 6`  +  `5 -> 9 -> 2, i.e. 617 + 295` \
+ Output: `2 -> 1 -> 9,  i.e. 912`
+ */
+
+print("TASK 2.5")
+//var n1 = getRandomIntList(n: 3)
+//var n2 = getRandomIntList(n: 3)
+
+var n1: LinkedList<Int>? = LinkedList<Int>(data: 0)
+n1?.append(data: 2)
+n1?.append(data: 5)
+var n2: LinkedList<Int>? = LinkedList<Int>(data: 3)
+n2?.append(data: 1)
+n2?.append(data: 5)
+
+n1?.printAll()
+n2?.printAll()
+
+func addLists(n1: LinkedList<Int>?, n2: LinkedList<Int>?) -> LinkedList<Int>? {
+
+    var iter1 = n1
+    var iter2 = n2
+    var resultList: LinkedList<Int>? = LinkedList<Int>(data: 0)
+    var carry = 0
+    while iter1 != nil || iter2 != nil {
+        let value = (iter1?.data ?? 0) + (iter2?.data ?? 0)
+        let rest = value % 10
+        resultList?.append(data: rest + carry)
+        if value > 9 {
+            carry = 1
+            if iter2?.next == nil && iter2?.next == nil {
+                resultList?.append(data: carry)
+            }
+        } else {
+            carry = 0
+        }
+        iter1 = iter1?.next
+        iter2 = iter2?.next
+    }
+
+    return resultList
+}
+
+let addingResult =  addLists(n1: n1, n2: n2)
+addingResult?.printAll()
+
+
+
+
