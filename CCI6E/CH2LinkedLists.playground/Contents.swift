@@ -342,5 +342,47 @@ print("result:")
 res?.printAll()
 
 
+/*
+ * Is Linked list a palindrome
+ */
 
 
+print("TASK 2.6 is palindrome")
+var sample: LinkedList<Int>? = LinkedList<Int>(data: 0)
+sample?.append(data: 1)
+sample?.append(data: 2)
+sample?.append(data: 4)
+sample?.append(data: 2)
+sample?.append(data: 1)
+sample?.append(data: 0)
+
+sample?.printAll()
+
+func isPalindrome(n1: LinkedList<Int>?) -> Bool {
+    var fast = n1
+    var slow = n1
+    var stack = [Int]()
+
+    while fast != nil && fast?.next != nil {
+        if let data = slow?.data {
+            stack.append(data)
+        }
+        slow = slow?.next
+        fast = fast?.next?.next
+    }
+    print(stack)
+    if n1!.count() % 2 != 0 {
+        slow = slow?.next
+    }
+
+    while slow != nil {
+        print("\(slow!.data) - \(stack.last!)")
+        if slow?.data != stack.popLast() {
+            return false
+        }
+        slow = slow?.next
+    }
+    return true
+}
+
+print(isPalindrome(n1: sample))
