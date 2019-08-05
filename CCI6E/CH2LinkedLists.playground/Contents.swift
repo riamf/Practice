@@ -305,6 +305,42 @@ func addLists(n1: LinkedList<Int>?, n2: LinkedList<Int>?) -> LinkedList<Int>? {
 let addingResult =  addLists(n1: n1, n2: n2)
 addingResult?.printAll()
 
+n1 = LinkedList<Int>(data: 6)
+n1?.append(data: 1)
+n1?.append(data: 7)
+
+n2 = LinkedList<Int>(data: 2)
+n2?.append(data: 9)
+n2?.append(data: 5)
+
+print("adding..")
+n1?.printAll()
+print("+")
+n2?.printAll()
+
+func recursiveAdd(n1: LinkedList<Int>?, n2: LinkedList<Int>?) -> (LinkedList<Int>?, Int) {
+
+    var value = (n1?.data ?? 0) + (n2?.data ?? 0)
+    var carry = 0
+    if value > 9 {
+        value = value % 10
+        carry = 1
+    }
+    if n1?.next == nil && n2?.next == nil {
+        print("\(carry) \(value)")
+        return (LinkedList<Int>(data: value), carry)
+    } else {
+        let (result, tmpCarry) = recursiveAdd(n1: n1?.next, n2: n2?.next)
+
+        result?.append(data: value + tmpCarry)
+        return (result, carry)
+    }
+}
+
+let (res, _) = recursiveAdd(n1: n1, n2: n2)
+print("result:")
+res?.printAll()
+
 
 
 
