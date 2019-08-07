@@ -55,6 +55,14 @@ class LinkedList<T> where T: Equatable {
         }
         return self
     }
+
+    func last() -> LinkedList<T>? {
+        var item: LinkedList<T>? = self
+        while item?.next != nil {
+            item = item?.next
+        }
+        return item
+    }
 }
 
 var start: LinkedList<Int>? = LinkedList(data: 0)
@@ -386,3 +394,90 @@ func isPalindrome(n1: LinkedList<Int>?) -> Bool {
 }
 
 print(isPalindrome(n1: sample))
+
+/*:
+ 2.7 Determine if two singly linked lists intersect, and return the intersecting node if they do. \
+ Intersection is defined by reference not value, i.e. the lists intersect if the ith node of one list is the same by reference as the kth node of the other list.
+ */
+print("TASK 2.7 does intersect")
+
+n1 = LinkedList<Int>(data: 0)
+let commonNode = n1?.append(data: 1)
+n1?.append(data: 2)
+
+n2 = LinkedList<Int>(data: 3)
+var tmp = n2?.append(data: 4)
+tmp?.next = commonNode
+
+n1?.printAll()
+n2?.printAll()
+
+func isIntersecting(n1: LinkedList<Int>?, n2: LinkedList<Int>?) -> LinkedList<Int>? {
+
+    guard n1?.last() === n2?.last() else {
+        return nil
+    }
+
+    let n1Count = n1?.count() ?? 0
+    let n2Count = n2?.count() ?? 0
+
+    let diff = abs(n1Count - n2Count)
+
+    var iter1 = n1Count > n2Count ? n1 : n2
+    var iter2 = n1Count > n2Count ? n2 : n1
+
+    for _ in (0..<diff) {
+        iter1 = iter1?.next
+    }
+
+    var res: LinkedList<Int>?
+
+    while iter1 != nil {
+        if iter1 === iter2 {
+            break
+        }
+        iter1 = iter1?.next
+        iter2 = iter2?.next
+    }
+
+    return iter1
+}
+
+var node = isIntersecting(n1: n1, n2: n2)
+print(node?.data)
+/*:
+ 2.8 Given a singly linked, circular list, return the node at the beginning of the loop.
+
+ A circular list is a (corrupt) linked list in which a node's next pointer points to
+ an earlier node in the list.
+
+ Input: `a -> b -> c -> d -> e -> c`  (The same c as before) \
+ Output: `c`
+ */
+print("TASK 2.8")
+
+n1 = LinkedList<Int>(data: 0)
+n1?.append(data: 1)
+node = n1?.append(data: 2)
+n1?.append(data: 3)
+let last = n1?.append(data: 4)
+last?.next = node
+
+func detectCyclic(n1: LinkedList<Int>?) -> LinkedList<Int>? {
+    var iter = n1
+    var set = Set<Int>()
+
+    while iter != nil {
+        print(iter!.data)
+        if set.contains(iter!.data) {
+            return iter
+        }
+        set.insert(iter!.data)
+        iter = iter?.next
+    }
+
+    return nil
+}
+
+node = detectCyclic(n1: n1)
+print(node?.data)
