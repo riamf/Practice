@@ -2,6 +2,10 @@ import UIKit
 
 print("Task 3.1")
 
+/*
+ 3.1 use single array to impement three stacks
+ */
+
 class ThreeInOne {
     private var array: [[Int]]
     var n: Int
@@ -37,6 +41,9 @@ print(tio.pop(sn: 0))
 print(tio.pop(sn: 1))
 print(tio.pop(sn: 2))
 
+/*
+ 3.2 implement stack that will always keep minimum element accesible in O(1) time
+ */
 print("Task 3.2")
 
 class MinStack {
@@ -82,6 +89,10 @@ print(minStack.min())
 minStack.pop()
 minStack.pop()
 print(minStack.min())
+
+/*
+ 3.3 implement a set of stacks structure that will keep multiple stacks with some capacity and will create new stack each time capacite exceeded.
+ */
 
 print("TASK 3.3")
 
@@ -140,3 +151,52 @@ for i in (0..<11) {
 for i in (0..<12) {
     print(sos.pop())
 }
+
+/*
+ 3.4 Implement MyQueue class that implements qeueu with two stacks
+ */
+
+print("Task 3.4")
+
+class MyQueue {
+    var stackOne: [Int]
+    var stackTwo: [Int]
+
+    init() {
+        stackOne = []
+        stackTwo = []
+    }
+
+    func enqueue(val: Int) {
+        stackOne.append(val)
+    }
+
+    func dequeue() -> Int? {
+        reload()
+        return stackTwo.popLast()
+    }
+
+    func peak() -> Int? {
+        reload()
+        return stackTwo.popLast()
+    }
+
+    private func reload() {
+        if stackTwo.isEmpty {
+            while let elem = stackOne.popLast() {
+                stackTwo.append(elem)
+            }
+        }
+    }
+}
+
+
+let myQueue = MyQueue()
+myQueue.enqueue(val: 0)
+myQueue.enqueue(val: 1)
+myQueue.enqueue(val: 2)
+myQueue.enqueue(val: 3)
+print(myQueue.dequeue())
+print(myQueue.dequeue())
+print(myQueue.dequeue())
+print(myQueue.dequeue())
