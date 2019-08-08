@@ -201,6 +201,10 @@ print(myQueue.dequeue())
 print(myQueue.dequeue())
 print(myQueue.dequeue())
 
+
+/*
+ Create a function to sort a stack using only one additional stack
+ */
 print("TASK 3.5")
 
 class Stack {
@@ -259,3 +263,97 @@ func sort(stack: Stack) -> Stack {
 let sorted = sort(stack: stack)
 sorted.printAll()
 
+/*
+ Animal shelter, using queue implement shelter where people can select dog or cat, in arrival order
+ or can just request oldest any animal
+ */
+print("Task 3.6")
+
+
+class Queue<T> {
+    var array: [T] = []
+
+    func enqueue(val: T) {
+        array.append(val)
+    }
+
+    func dequeue() -> T {
+        return array.removeFirst()
+    }
+
+    func peak() -> T {
+        return array[0]
+    }
+
+    func isEmpty() -> Bool {
+        return array.isEmpty
+    }
+
+    func printAll() {
+        print(array)
+    }
+}
+
+protocol Animal {
+    var name: String { get set }
+}
+struct Dog: Animal {
+    var name: String
+}
+struct Cat: Animal {
+    var name: String
+}
+
+class AnimalShelter {
+    var dogs = Queue<(Dog, Int)>()
+    var cats = Queue<(Cat, Int)>()
+    var counter = 0
+
+    func enqueue(animal: Animal) {
+
+        counter += 1
+        if let animal = animal as? Dog {
+            dogs.enqueue(val: (animal, counter))
+        } else if let animal = animal as? Cat {
+            cats.enqueue(val: (animal, counter))
+        }
+    }
+
+    func dequeueAny() -> Animal {
+        let oldestCat = cats.peak()
+        let oldestDog = dogs.peak()
+        let oldest: Animal = oldestCat.1 < oldestDog.1 ? cats.dequeue().0 : dogs.dequeue().0
+        return oldest
+    }
+
+    func dequeueDog() -> Dog {
+        return dogs.dequeue().0
+    }
+
+    func dequeueCat() -> Cat {
+        return cats.dequeue().0
+    }
+
+    func printAll() {
+        dogs.printAll()
+        cats.printAll()
+    }
+}
+
+let shelter = AnimalShelter()
+for i in (0..<10) {
+    if let s = (0...100).randomElement(), s % 2 == 0 {
+        shelter.enqueue(animal: Dog(name: "Dog \(i)"))
+    } else {
+        shelter.enqueue(animal: Cat(name: "Cat \(i)"))
+    }
+}
+
+shelter.printAll()
+
+let dequeAny = shelter.dequeueAny()
+print(dequeAny.name)
+let dequeCat = shelter.dequeueCat()
+print(dequeCat.name)
+let dequeDog = shelter.dequeueDog()
+print(dequeDog.name)
