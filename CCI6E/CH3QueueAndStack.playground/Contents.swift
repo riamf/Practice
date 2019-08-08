@@ -200,3 +200,62 @@ print(myQueue.dequeue())
 print(myQueue.dequeue())
 print(myQueue.dequeue())
 print(myQueue.dequeue())
+
+print("TASK 3.5")
+
+class Stack {
+    var array: [Int] = []
+
+    func push(val: Int) {
+        array.append(val)
+    }
+
+    func pop() -> Int? {
+        return array.popLast()
+    }
+
+    func peak() -> Int? {
+        return array.last
+    }
+
+    func isEmpty() -> Bool {
+        return array.isEmpty
+    }
+
+    func printAll() {
+        print(array)
+    }
+}
+
+var stack = Stack()
+for i in (0..<10) {
+    stack.push(val: (0...30).randomElement()!)
+}
+
+stack.printAll()
+
+
+func sort(stack: Stack) -> Stack {
+    var result = Stack()
+
+    while !stack.isEmpty() {
+        var tmp = stack.pop()
+        if result.isEmpty() || tmp! <= result.peak()! {
+            result.push(val: tmp!)
+        } else {
+            while !result.isEmpty() {
+                var val = result.pop()
+                stack.push(val: val!)
+                if result.isEmpty() || tmp! <= result.peak()! {
+                    result.push(val: tmp!)
+                    break;
+                }
+            }
+        }
+    }
+    return result
+}
+
+let sorted = sort(stack: stack)
+sorted.printAll()
+
