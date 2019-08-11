@@ -201,8 +201,8 @@ class BSTree {
             return
         }
         print(node)
-        inOrderTraversal(node: node.left)
-        inOrderTraversal(node: node.right)
+        preOrderTraversal(node: node.left)
+        preOrderTraversal(node: node.right)
     }
 
     func postot() {
@@ -253,14 +253,15 @@ var leftIndex = middleIndex
 var rightIndex = leftIndex + 1
 
 
-while leftIndex > 0 || rightIndex < samples.count {
-    bsTree.add(node: TNode(samples[leftIndex]))
-    bsTree.add(node: TNode(samples[rightIndex]))
-    leftIndex -= 1
-    rightIndex += 1
-}
-
-bsTree.iot()
+//brute force bad example
+//while leftIndex > 0 || rightIndex < samples.count {
+//    bsTree.add(node: TNode(samples[leftIndex]))
+//    bsTree.add(node: TNode(samples[rightIndex]))
+//    leftIndex -= 1
+//    rightIndex += 1
+//}
+//
+//bsTree.iot()
 print("Tree height is: \(bsTree.height())")
 
 func cmbst(vals: [Int], s: Int, e: Int) -> TNode? {
@@ -278,3 +279,121 @@ let tmpNode = cmbst(vals: samples, s: 0, e: samples.count - 1)
 var bsTree2 = BSTree(root: tmpNode)
 
 print("Tree height is: \(bsTree2.height())")
+
+/*
+ Given BTree Create algo that creates linked list from all nodes per depth
+ */
+print("Task 4.3")
+
+class BTree {
+    var root: TNode?
+
+    init(root: TNode?) {
+        self.root = root
+    }
+
+    func add(node: TNode) {
+        guard let root = root else {
+            self.root = node
+            return
+        }
+
+        let insertNode = findEmpty(node: root, level: 0)
+        print("INSERTING AT LEVEL: \(insertNode.0)")
+        if insertNode.1.left == nil {
+            insertNode.1.left = node
+        } else {
+            insertNode.1.right = node
+        }
+
+    }
+
+    func findEmpty(node: TNode, level: Int) -> (Int, TNode) {
+        var leftDP = (0, node)
+        var rightDP = (0, node)
+        if let left = node.left {
+            leftDP = findEmpty(node: left, level: level+1)
+        } else {
+            return (level + 1, node)
+        }
+
+        if let right = node.right {
+            rightDP = findEmpty(node: right, level: level+1)
+        } else {
+            return (level, node)
+        }
+
+        if leftDP.0 < rightDP.0 {
+            return leftDP
+        } else {
+            return rightDP
+        }
+    }
+
+    func preot() {
+        preOrderTraversal(node: root, level: 0)
+    }
+
+    private func preOrderTraversal(node: TNode?, level: Int) {
+        guard let node = node else {
+            return
+        }
+        print("\(node)-\(level)")
+        preOrderTraversal(node: node.left, level: level + 1)
+        preOrderTraversal(node: node.right, level: level + 1)
+    }
+
+    func printAll() {
+        guard let root = root else { return }
+        print2DUtil(node: root, level: 0)
+    }
+
+    private func print2DUtil(node: TNode, level: Int) {
+        if let r = node.right {
+            print2DUtil(node: r, level: level + 10)
+        }
+        print("\n")
+        let space = (0..<level).map({ _ in return "-"}).joined(separator: "")
+        print("\(space)\(node)")
+        if let left = node.left {
+            print2DUtil(node: left, level: level + 10)
+        }
+    }
+}
+
+let bTree = BTree(root: nil)
+samples = []
+for _ in (0...10) {
+    if let val = (0...1000).randomElement() {
+        if !samples.contains(val) {
+            samples.append(val)
+        }
+    }
+}
+
+for val in samples {
+    bTree.add(node: TNode(val))
+}
+
+print(samples)
+bTree.preot()
+bTree.printAll()
+
+func listOfDepths(node: TNode, level: Int, list: inout [[TNode]]) {
+    if list.count == level {
+        list.append([])
+    }
+    list[level].append(node)
+    if let l = node.left {
+        listOfDepths(node: l, level: level + 1, list: &list)
+    }
+    if let r = node.right {
+        listOfDepths(node: r, level: level + 1, list: &list)
+    }
+}
+
+var depths: [[TNode]] = []
+listOfDepths(node: bTree.root!, level: 0, list: &depths)
+for (i, d) in depths.enumerated() {
+    print("\(i): \(d)")
+}
