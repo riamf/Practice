@@ -133,4 +133,148 @@ print("is there a way from node a to node c :\(g.bfs(from: a, to: c))")
 print("is there a way from node a to node c :\(g.bfs(from: b, to: f))")
 
 
+class TNode: CustomStringConvertible {
+    let val: Int
+    var left: TNode?
+    var right: TNode?
 
+    func add(node: TNode) {
+
+        if node.val <= val {
+            if let left = left {
+                left.add(node: node)
+            } else {
+                left = node
+            }
+        } else {
+            if let right = right {
+                right.add(node: node)
+            } else {
+                right = node
+            }
+        }
+    }
+
+    init(_ val: Int) {
+        self.val = val
+    }
+
+    var description: String {
+        return "\(val)"
+    }
+}
+
+class BSTree {
+    var root: TNode?
+
+    init(root: TNode?) {
+        self.root = root
+    }
+
+    func add(node: TNode) {
+        if let root = root {
+            root.add(node: node)
+        } else {
+            root = node
+        }
+    }
+
+    func iot() {
+        inOrderTraversal(node: root)
+    }
+
+    private func inOrderTraversal(node: TNode?) {
+        guard let node = node else {
+            return
+        }
+        inOrderTraversal(node: node.left)
+        print(node)
+        inOrderTraversal(node: node.right)
+    }
+
+    func preot() {
+        preOrderTraversal(node: root)
+    }
+
+    private func preOrderTraversal(node: TNode?) {
+        guard let node = node else {
+            return
+        }
+        print(node)
+        inOrderTraversal(node: node.left)
+        inOrderTraversal(node: node.right)
+    }
+
+    func postot() {
+        postOrderTraversal(node: root)
+    }
+
+    private func postOrderTraversal(node: TNode?) {
+        guard let node = node else {
+            return
+        }
+        postOrderTraversal(node: node.left)
+        postOrderTraversal(node: node.right)
+        print(node)
+    }
+
+    func height() -> Int {
+        return height(node: root)
+    }
+
+    private func height(node: TNode?) -> Int {
+        guard let node = node else { return 0 }
+        let leftH = 1 + height(node: node.left)
+        let rightH = 1 + height(node: node.right)
+        return leftH > rightH ? leftH : rightH
+    }
+
+}
+
+/*
+ minimal Tree Given sorted array (incrisingly) with unique values writhe function to create bst with minimal heaight
+ */
+print("TASK 4.2")
+let bsTree = BSTree(root: nil)
+
+var samples = [Int]()
+for _ in (0..<20) {
+    if let val = (0...100).randomElement() {
+        if !samples.contains(val) {
+            samples.append(val)
+        }
+    }
+}
+samples = samples.sorted()
+print(samples)
+
+let middleIndex = samples.count/2
+var leftIndex = middleIndex
+var rightIndex = leftIndex + 1
+
+
+while leftIndex > 0 || rightIndex < samples.count {
+    bsTree.add(node: TNode(samples[leftIndex]))
+    bsTree.add(node: TNode(samples[rightIndex]))
+    leftIndex -= 1
+    rightIndex += 1
+}
+
+bsTree.iot()
+print("Tree height is: \(bsTree.height())")
+
+func cmbst(vals: [Int], s: Int, e: Int) -> TNode? {
+    if e < s {
+        return nil
+    }
+    let mid = (s + e) / 2
+    let n = TNode(vals[mid])
+    n.left = cmbst(vals: vals, s: s, e: mid - 1)
+    n.right = cmbst(vals: vals, s: mid + 1, e: e)
+    return n
+}
+
+let tmpNode = cmbst(vals: samples, s: 0, e: samples.count - 1)
+var bsTree2 = BSTree(root: tmpNode)
+
+print("Tree height is: \(bsTree2.height())")
