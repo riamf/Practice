@@ -397,3 +397,49 @@ listOfDepths(node: bTree.root!, level: 0, list: &depths)
 for (i, d) in depths.enumerated() {
     print("\(i): \(d)")
 }
+/*:
+ Implement a function to check if a binary tree is balanced. For this question
+ a binary tree is defined as a tree whose subtrees' heights differ by no more than 1.
+ */
+print("Task 4.4")
+
+func height(node: TNode, level: Int) -> Int {
+    var lh = level
+    var rh = level
+    if let left = node.left {
+        lh = height(node: left, level: level + 1)
+    }
+    if let right = node.right {
+        rh = height(node: right, level: level + 1)
+    }
+
+    return lh > rh ? lh : rh
+}
+
+func isBalanced(node: TNode) -> Bool {
+    var leftH = 0
+    if let left = node.left {
+        leftH = height(node: left, level: 0)
+    }
+    var rightH = 0
+    if let right = node.right {
+        rightH = height(node: right, level: 0)
+    }
+
+    var isLeftBalanced = true
+    var isRightBalanced = true
+    if let right = node.right {
+        isRightBalanced = isBalanced(node: right)
+    }
+    if let left = node.left {
+        isLeftBalanced = isBalanced(node: left)
+    }
+
+    return abs(rightH - leftH) <= 1 && isLeftBalanced && isRightBalanced
+}
+
+// To make it not balanced uncomment:
+//bTree.root?.right?.right?.right = TNode(17)
+//bTree.root?.right?.right?.right?.right = TNode(19)
+bTree.printAll()
+print("IS TRRE BALANCED: \(isBalanced(node: bTree.root!))")
