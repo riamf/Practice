@@ -443,3 +443,79 @@ func isBalanced(node: TNode) -> Bool {
 //bTree.root?.right?.right?.right?.right = TNode(19)
 bTree.printAll()
 print("IS TRRE BALANCED: \(isBalanced(node: bTree.root!))")
+
+
+func printIter(tree: BTree) {
+    guard let _ = tree.root else { return }
+
+    var queue =  [TNode]()
+    queue.append(tree.root!)
+
+    while !queue.isEmpty {
+        let tmp = queue.remove(at: 0)
+        print(tmp)
+        if let left = tmp.left {
+            queue.append(left)
+        }
+        if let right = tmp.right {
+            queue.append(right)
+        }
+    }
+}
+
+
+
+printIter(tree: bTree)
+
+
+/*
+    Validate if tree is bst
+ */
+
+func isBST(node: TNode?) -> Bool {
+    guard let _ = node else { return true }
+    var queue = [TNode]()
+    queue.append(node!)
+
+    while !queue.isEmpty {
+        let tmp = queue.remove(at: 0)
+
+        if let leftVal = tmp.left?.val, leftVal > tmp.val {
+            return false
+        }
+
+        if let rightVal = tmp.right?.val, rightVal <= tmp.val {
+            return false
+        }
+
+        if let left = tmp.left {
+            queue.append(left)
+        }
+        if let right = tmp.right {
+            queue.append(right)
+        }
+    }
+
+    return true
+}
+
+print("Is tree a bst: \(isBST(node: bTree.root))")
+print("Is tree a bst: \(isBST(node: bsTree.root))")
+
+func isBST2(node: TNode?) -> Bool {
+    guard let node = node else { return true }
+
+    var isValid = true
+    if let left = node.left, left.val > node.val {
+        isValid = false
+    }
+    if let right = node.right, right.val <= node.val {
+        isValid = false
+    }
+
+    return isValid && isBST2(node: node.left) && isBST2(node: node.right)
+}
+
+print("Is tree a bst: \(isBST2(node: bTree.root))")
+print("Is tree a bst: \(isBST2(node: bsTree.root))")
+
