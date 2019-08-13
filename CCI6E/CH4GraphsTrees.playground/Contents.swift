@@ -133,7 +133,12 @@ print("is there a way from node a to node c :\(g.bfs(from: a, to: c))")
 print("is there a way from node a to node c :\(g.bfs(from: b, to: f))")
 
 
-class TNode: CustomStringConvertible {
+class TNode: CustomStringConvertible, Equatable {
+
+    static func == (lhs: TNode, rhs: TNode) -> Bool {
+        return lhs.val == rhs.val && lhs.left == rhs.left && lhs.right == rhs.right
+    }
+
     let val: Int
     var left: TNode?
     var right: TNode?
@@ -561,9 +566,9 @@ func findBuildOrder(nodes: [Node]) throws -> [Node] {
     nodesCopy.removeAll(where: { result.contains($0) })
     var numberOfIterationsWithNoChange = 0
     while !nodesCopy.isEmpty {
-        var tmp = nodesCopy.remove(at: 0)
+        let tmp = nodesCopy.remove(at: 0)
         let resSet = Set(result)
-        var tmpSet = Set(tmp.adjacencyList)
+        let tmpSet = Set(tmp.adjacencyList)
         if tmpSet.isSubset(of: resSet) {
             result.append(tmp)
             numberOfIterationsWithNoChange = 0
@@ -584,3 +589,44 @@ do {
 } catch {
     print("UNABLE TO BUILD")
 }
+
+print("TASK 4.8")
+/*
+ Write a function to find a first common ancestor in tree
+ */
+
+
+bTree.printAll()
+
+func findAncestor(node1: TNode?, node2: TNode?, root: TNode?) -> TNode? {
+
+    var currentCommonAncestor = root
+
+    let isAncestorLeft = isAncestor(of: node1, in: root?.left) && isAncestor(of: node2, in: root?.left)
+    let isAncestorRight = isAncestor(of: node1, in: root?.right) && isAncestor(of: node2, in: root?.right)
+
+    if isAncestorLeft {
+        currentCommonAncestor = findAncestor(node1: node1, node2: node2, root: root?.left) ?? root?.left
+    } else if isAncestorRight {
+        currentCommonAncestor = findAncestor(node1: node1, node2: node2, root: root?.right) ?? root?.right
+    }
+
+    return currentCommonAncestor
+}
+
+func isAncestor(of node: TNode?, in root: TNode?) -> Bool {
+    guard let root = root else { return false }
+
+    if node == root {
+        return true
+    }
+
+    return isAncestor(of: node, in: root.left) || isAncestor(of: node, in: root.right)
+}
+
+let node1: TNode! = bTree.root?.right?.right?.right
+let node2: TNode! = bTree.root?.right?.left?.right
+
+print("First common ancestors of \(String(describing: node1)) && \(String(describing: node2)) is :\(String(describing: findAncestor(node1: node1, node2: node2, root: bTree.root)))")
+
+
