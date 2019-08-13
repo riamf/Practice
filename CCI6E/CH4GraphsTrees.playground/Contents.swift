@@ -518,4 +518,3 @@ func isBST2(node: TNode?) -> Bool {
 
 print("Is tree a bst: \(isBST2(node: bTree.root))")
 print("Is tree a bst: \(isBST2(node: bsTree.root))")
-
