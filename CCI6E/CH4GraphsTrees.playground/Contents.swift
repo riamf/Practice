@@ -106,14 +106,14 @@ class Graph {
     }
 }
 
-let g = Graph()
+var g = Graph()
 
-let a = Node("a")
-let b = Node("b")
-let c = Node("c")
-let d = Node("d")
-let e = Node("e")
-let f = Node("f")
+var a = Node("a")
+var b = Node("b")
+var c = Node("c")
+var d = Node("d")
+var e = Node("e")
+var f = Node("f")
 a.add([b, e, f])
 b.add([d, e])
 c.add([b])
@@ -519,3 +519,68 @@ func isBST2(node: TNode?) -> Bool {
 print("Is tree a bst: \(isBST2(node: bTree.root))")
 print("Is tree a bst: \(isBST2(node: bsTree.root))")
 
+/*
+ A successor ?!?!?!?!?
+ */
+print("TASK 4.6")
+
+
+/*
+ Build order find order to build project dependencies
+ */
+print("TASK 4.7")
+
+g = Graph()
+
+a = Node("a")
+b = Node("b")
+c = Node("c")
+d = Node("d")
+e = Node("e")
+f = Node("f")
+d.add([a, b])
+b.add([f])
+a.add([f])
+c.add([d])
+
+enum DepsError: Error {
+    case unableToBuild
+}
+
+func findBuildOrder(nodes: [Node]) throws -> [Node] {
+
+    var result = [Node]()
+
+    for n in nodes {
+        if n.adjacencyList.isEmpty {
+            result.append(n)
+        }
+    }
+
+    var nodesCopy = nodes
+    nodesCopy.removeAll(where: { result.contains($0) })
+    var numberOfIterationsWithNoChange = 0
+    while !nodesCopy.isEmpty {
+        var tmp = nodesCopy.remove(at: 0)
+        let resSet = Set(result)
+        var tmpSet = Set(tmp.adjacencyList)
+        if tmpSet.isSubset(of: resSet) {
+            result.append(tmp)
+            numberOfIterationsWithNoChange = 0
+        } else {
+            numberOfIterationsWithNoChange += 1
+            nodesCopy.append(tmp)
+        }
+        if numberOfIterationsWithNoChange >= 2 {
+            throw DepsError.unableToBuild
+        }
+    }
+
+    return result
+}
+
+do {
+    print("BUILD ORDER FOR a b c d e f NODES is: \(try findBuildOrder(nodes: [a, b, c, d, e, f]))")
+} catch {
+    print("UNABLE TO BUILD")
+}
