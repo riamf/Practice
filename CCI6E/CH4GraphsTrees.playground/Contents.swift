@@ -971,3 +971,73 @@ for _ in (0..<10) {
     print("Random element: \(bsrTree.getRandom())")
 }
 
+print("Task 4.12")
+
+/*
+ Count paths in binary tree that sums up to given value
+ */
+
+var btreePaths = BTree(root: nil)
+samples = []
+for _ in (0...10) {
+    if let rnd = (0..<5).randomElement() {
+//        if !samples.contains(rnd) {
+            btreePaths.add(node: TNode(rnd))
+            samples.append(rnd)
+//        }
+    }
+}
+
+btreePaths.printAll()
+
+func some(node: TNode?, prefix: inout String) {
+    guard let node = node else { return }
+    prefix.append("\(node.val)")
+    print(prefix)
+    some(node: node.left, prefix: &prefix)
+    some(node: node.right, prefix: &prefix)
+}
+
+func isThereSum(_ sum: Int, node: TNode?, val: inout Int) -> Bool {
+    guard let node = node else { return false }
+    print("\(val) + \(node.val) = \(val + node.val)")
+    val += node.val
+    var valCopy = val
+    if val == sum {
+        return true
+    }
+    let isLeft = isThereSum(sum, node: node.left, val: &val)
+    val = valCopy
+    let isRight = isThereSum(sum, node: node.right, val: &val)
+
+    return isLeft || isRight
+}
+
+
+func traverseNodes(root: TNode, val: Int) -> Int {
+    var count = 0
+    var queue: [TNode] = []
+    queue.append(root)
+
+    while !queue.isEmpty {
+        let tmp = queue.remove(at: 0)
+        var some = 0
+        if isThereSum(val, node: tmp, val: &some) {
+            count += 1
+        }
+        if let left = tmp.left {
+            queue.append(left)
+        }
+        if let right = tmp.right {
+            queue.append(right)
+        }
+    }
+
+    return count
+}
+
+//var prefix = ""
+//print(some(node: btreePaths.root, prefix: &prefix))
+var sum = 0
+print(isThereSum(4, node: btreePaths.root!, val: &sum))
+print("Number of paths in tree that sums up to 7 is \(traverseNodes(root: btreePaths.root!, val: 4))")
