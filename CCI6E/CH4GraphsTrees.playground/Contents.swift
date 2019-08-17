@@ -846,3 +846,21 @@ func isSubtreeIdentical(test: TNode?, original: TNode?) -> Bool {
 }
 
 print("Is T2 subtree of T1: \(isSubtree(test: t2, original: t1))")
+
+func preOrderString(node: TNode?) -> String {
+    guard let node = node else {
+        return "X"
+    }
+
+    var res = "\(node.val)"
+    let left = preOrderString(node: node.left)
+    let right = preOrderString(node: node.right)
+
+    return res + left + right
+}
+
+print(preOrderString(node: t1.root))
+print(preOrderString(node: t2.root))
+let t1String = preOrderString(node: t1.root)
+let t2String = preOrderString(node: t2.root)
+print("Is T2 subtree of T1: \(t1String.contains(t2String))")
