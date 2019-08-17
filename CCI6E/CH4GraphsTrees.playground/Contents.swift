@@ -1041,3 +1041,22 @@ func traverseNodes(root: TNode, val: Int) -> Int {
 var sum = 0
 print(isThereSum(4, node: btreePaths.root!, val: &sum))
 print("Number of paths in tree that sums up to 7 is \(traverseNodes(root: btreePaths.root!, val: 4))")
+
+
+func allPossiblePaths(node: TNode?, path: inout String) -> [String] {
+    guard let node = node else { return [] }
+    var results = [String]()
+
+    path += "\(node.val)"
+    results.append(path)
+//    print(path)
+    var pathCopy = path
+    results += allPossiblePaths(node: node.left, path: &path)
+    path = pathCopy
+    results += allPossiblePaths(node: node.right, path: &path)
+    return results
+}
+
+var paths = ""
+print(allPossiblePaths(node: btreePaths.root!, path: &paths))
+
