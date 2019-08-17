@@ -864,3 +864,110 @@ print(preOrderString(node: t2.root))
 let t1String = preOrderString(node: t1.root)
 let t2String = preOrderString(node: t2.root)
 print("Is T2 subtree of T1: \(t1String.contains(t2String))")
+
+print("Task 4.11")
+
+class TRNode: CustomStringConvertible {
+    var left : TRNode?
+    var right: TRNode?
+
+    var val: Int
+    var size: Int = 1
+
+    var description: String {
+        return "\(val) - \(size)"
+    }
+
+    init(val: Int) {
+        self.val = val
+    }
+
+    func add(node: TRNode) {
+        size += 1
+        if node.val <= val {
+            if let left = left {
+                left.add(node: node)
+            } else {
+                left = node
+            }
+        } else {
+            if let right = right {
+                right.add(node: node)
+            } else {
+                right = node
+            }
+        }
+    }
+
+    func randomNode() -> TRNode? {
+        let rnd = (0...size).randomElement() ?? 0
+        if let left = left, rnd < left.size {
+            return left.randomNode()
+        } else if rnd == left?.size {
+            return self
+        } else {
+            return right?.randomNode()
+        }
+    }
+}
+
+class RTree {
+    var root: TRNode?
+
+    init(root: TRNode?) {
+        self.root = root
+    }
+
+    func add(node: TRNode) {
+        guard let root = root else {
+            self.root = node
+            return
+        }
+
+        root.add(node: node)
+    }
+
+    func getRandom() -> TRNode? {
+        guard let root = root else {
+            return nil
+        }
+        guard root.size > 1 else {
+            return root
+        }
+        return root.randomNode()
+    }
+
+    func printAll() {
+        guard let root = root else { return }
+        print2DUtil(node: root, level: 0)
+    }
+
+    private func print2DUtil(node: TRNode, level: Int) {
+        if let r = node.right {
+            print2DUtil(node: r, level: level + 10)
+        }
+        print("\n")
+        let space = (0..<level).map({ _ in return "-"}).joined(separator: "")
+        print("\(space)\(node)")
+        if let left = node.left {
+            print2DUtil(node: left, level: level + 10)
+        }
+    }
+}
+
+var bsrTree = RTree(root: nil)
+samples = []
+for _ in (0...10) {
+    if let rnd = (0...30).randomElement() {
+        if !samples.contains(rnd) {
+            bsrTree.add(node: TRNode(val: rnd))
+            samples.append(rnd)
+        }
+    }
+}
+
+bsrTree.printAll()
+for _ in (0..<10) {
+    print("Random element: \(bsrTree.getRandom())")
+}
+
