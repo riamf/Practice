@@ -234,13 +234,30 @@ class BSTree {
         return leftH > rightH ? leftH : rightH
     }
 
+    func printAll() {
+        guard let root = root else { return }
+        print2DUtil(node: root, level: 0)
+    }
+
+    private func print2DUtil(node: TNode, level: Int) {
+        if let r = node.right {
+            print2DUtil(node: r, level: level + 10)
+        }
+        print("\n")
+        let space = (0..<level).map({ _ in return "-"}).joined(separator: "")
+        print("\(space)\(node)")
+        if let left = node.left {
+            print2DUtil(node: left, level: level + 10)
+        }
+    }
+
 }
 
 /*
  minimal Tree Given sorted array (incrisingly) with unique values writhe function to create bst with minimal heaight
  */
 print("TASK 4.2")
-let bsTree = BSTree(root: nil)
+var bsTree = BSTree(root: nil)
 
 var samples = [Int]()
 for _ in (0..<20) {
@@ -630,3 +647,202 @@ let node2: TNode! = bTree.root?.right?.left?.right
 print("First common ancestors of \(String(describing: node1)) && \(String(describing: node2)) is :\(String(describing: findAncestor(node1: node1, node2: node2, root: bTree.root)))")
 
 
+print("TASK 4.9")
+/*
+ Print all possible arrays that create d given binary tree
+ */
+
+//func allPossibleArrays(root: TNode?) -> [[Int]] {
+//    guard let root = root else { return [] }
+//
+//    var result = [[Int]]()
+//    var queue = [(TNode, Int)]()
+//    queue.append((root, 0))
+//    while !queue.isEmpty {
+//        let (tmp, currentLevel) = queue.remove(at: 0)
+//
+//        print("node: \(tmp) is on level: \(currentLevel)")
+//        if let left = tmp.left {
+//            queue.append((left, currentLevel + 1))
+//        }
+//        if let right = tmp.right {
+//            queue.append((right, currentLevel + 1))
+//        }
+//    }
+//
+//    return result
+//}
+
+func allPossibleArrays(root: TNode?) -> [[Int]] {
+    guard let root = root else { return [[]] }
+
+    var leftRes = [[Int]]()
+    if let left = root.left {
+        leftRes = allPossibleArrays(root: left)
+    }
+
+    var rightRes = [[Int]]()
+    if let right = root.right {
+        rightRes = allPossibleArrays(root: right)
+    }
+
+
+    return leftRes
+
+}
+
+func allPossiblePerm(sample: [Int], prefix: [Int]) -> [[Int]] {
+    if sample.count == 2 {
+        return [sample, sample.reversed()]
+    }
+    var returnValue = [[Int]]()
+    for (i, val) in sample.enumerated() {
+        var sampleCopy = sample
+        sampleCopy.remove(at: i)
+        let results = allPossiblePerm(sample: sampleCopy, prefix: [val] + prefix)
+        for res in results {
+            returnValue.append([val] + res)
+        }
+    }
+
+    return returnValue
+}
+
+bsTree = BSTree(root: nil)
+
+samples = [Int]()
+for _ in (0..<6) {
+    if let val = (0...20).randomElement() {
+        if !samples.contains(val) {
+            samples.append(val)
+            bsTree.add(node: TNode(val))
+        }
+    }
+}
+
+bsTree.printAll()
+print("create array: \(samples)")
+print("all possible arrays")
+//print(allPossibleArrays(root: bsTree.root))
+
+allPossibleArrays(root: bsTree.root)
+
+func wave(first: inout [Int], second: inout [Int], results: inout [[Int]], prefix: inout [Int]) {
+
+    if first.isEmpty || second.isEmpty {
+        var result = [Int]()
+        result.append(contentsOf: prefix)
+        result.append(contentsOf: first)
+        results.append(result)
+        return
+    }
+
+    let headFirst = first.remove(at: 0)
+    prefix.append(headFirst)
+    wave(first: &first, second: &second, results: &results, prefix: &prefix)
+    prefix.popLast()
+    first.insert(headFirst, at: 0)
+
+    let headSecond = second.remove(at: 0)
+    prefix.append(headSecond)
+    wave(first: &first, second: &second, results: &results, prefix: &prefix)
+    prefix.popLast()
+    second.insert(headSecond, at: 0)
+}
+
+
+//var waveT1 = [1, 2]
+//var waveT2 = [3, 4]
+//var res = [[Int]]()
+//var pref = [Int]()
+//wave(first: &waveT1, second: &waveT2, results: &res, prefix: &pref)
+//print(res)
+
+func allSequences(node: TNode?) -> [[Int]] {
+    guard let node = node else { return [[]] }
+
+    var result = [[Int]]()
+
+    var prefix = [node.val]
+
+    var leftSeq = allSequences(node: node.left)
+    var rightSeq = allSequences(node: node.right)
+
+    for i in (0..<leftSeq.count) {
+        var left = leftSeq[i]
+        for j in (0..<rightSeq.count) {
+            var right = rightSeq[j]
+            var waved = [[Int]]()
+            wave(first: &left, second: &right, results: &waved, prefix: &prefix)
+            result.append(contentsOf: waved)
+        }
+    }
+
+    return result
+}
+
+
+print(allSequences(node: bsTree.root))
+print("TASK 4.10")
+/*
+ Check it T2 is a subtree of T1
+ */
+
+var t1 = BTree(root: nil)
+samples = []
+for _ in (0..<33) {
+    if let rnd = (0...900).randomElement() {
+        if !samples.contains(rnd) {
+            t1.add(node: TNode(rnd))
+            samples.append(rnd)
+        }
+    }
+}
+
+
+print("Printing t1:")
+t1.printAll()
+var t2 = BTree(root: t1.root?.right?.left)
+print("Printing t2:")
+t2.printAll()
+
+func isSubtree(test: BTree, original: BTree) -> Bool {
+    guard let commonNode = isAncestorGiveCommonOriginalNode(test: test.root, original: original.root) else {
+        return false
+    }
+    
+
+    return isSubtreeIdentical(test: test.root, original: commonNode)
+}
+
+
+func isAncestorGiveCommonOriginalNode(test: TNode?, original: TNode?) -> TNode? {
+    guard let original = original else {
+        return nil
+    }
+
+    if let test = test, test == original {
+        return original
+    }
+
+    let left = isAncestorGiveCommonOriginalNode(test: test, original: original.left)
+    let right = isAncestorGiveCommonOriginalNode(test: test, original: original.right)
+
+
+    return left ?? right
+}
+
+func isSubtreeIdentical(test: TNode?, original: TNode?) -> Bool {
+
+    if (test == nil && original == nil) || test == original {
+        return true
+    } else {
+        return false
+    }
+
+    return
+        isSubtreeIdentical(test: test?.left, original: original?.left)
+        && isSubtreeIdentical(test: test?.right, original: original?.right)
+}
+
+print("Is T2 subtree of T1: \(isSubtree(test: t2, original: t1))")
