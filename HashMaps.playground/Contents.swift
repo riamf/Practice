@@ -58,7 +58,9 @@ extension String {
 func sherlockAndAnagrams(s: String) -> Int {
     var allSubstrings = [String]()
     for i in (0..<s.count) {
-        allSubstrings.append(s.substring(start: i, end: i))
+        for j in (i..<s.count) {
+            allSubstrings.append(s.substring(start: i, end: j))
+        }
     }
 
     var cnt = 0
@@ -67,7 +69,7 @@ func sherlockAndAnagrams(s: String) -> Int {
         for j in (i+1..<allSubstrings.count) {
             let s2 = allSubstrings[j]
             if isAnagram(s1: s1, s2: s2) {
-                print("\(s1) - \(s2)")
+//                print("\(s1) - \(s2)")
                 cnt += 1
             }
         }
