@@ -96,3 +96,24 @@ print(sherlockAndAnagrams(s: "abba"))
 print(sherlockAndAnagrams(s: "ifailuhkqq"))
 print(sherlockAndAnagrams(s: "kkkk"))
 //print(sherlockAndAnagrams(s: "ifailuhkqqhucpoltgtyovarjsnrbfpvmupwjjjfiwwhrlkpekxxnebfrwibylcvkfealgonjkzwlyfhhkefuvgndgdnbelgruel"))
+
+func countTriplets(arr: [Int], r: Int) -> Int {
+
+    var cnt = 0
+    for i in (0..<arr.count) {
+        let x = arr[i]
+        for j in (i+1..<arr.count) {
+            if arr[j] == x * r {
+                let y = arr[j]
+                for k in (j+1..<arr.count) {
+                    if arr[k] == y * r {
+                        cnt += 1
+                    }
+                }
+            }
+        }
+    }
+    return cnt
+}
+
+print(countTriplets(arr: [1,4,16,64], r: 4))
