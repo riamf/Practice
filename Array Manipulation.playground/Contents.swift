@@ -24,38 +24,37 @@ import UIKit
 
 func arrayManipulation(n: Int, queries: [[Int]]) -> Int {
 
-    var maxVal = 0
-
-    var qCopy = queries
-
-    for i in (0..<queries.count) {
-        let q = queries[i]
+    var indexes = Array<Int>(repeating: 0, count: n + 2)
+    for q in queries {
         let a = q[0]
         let b = q[1]
         let k = q[2]
-        let range = (a...b)
-        var newRanges = [[Int]]()
-        for j in ((i+1)..<qCopy.count) {
-            if i == j { continue }
-            let q2 = qCopy[j]
-            let a1 = q2[0]
-            let b1 = q2[1]
-            let k2 = q2[2]
-            let range2 = (a1...b1)
-            if range2.overlaps(range) {
-                let newa = max(a1, a)
-                let newb = min(b, b1)
-                let val = k2 + k
-                newRanges.append([newa, newb, val])
-                if val > maxVal {
-                    maxVal = val
-                }
-            }
-        }
-        qCopy.append(contentsOf: newRanges)
-    }
-    print(qCopy)
 
+        indexes[a] += k
+        if b+1 < indexes.count {
+            indexes[b+1] -= k
+        }
+    }
+
+    var maxVal = 0
+    var sum = 0
+    for i in indexes {
+        sum += i
+        if sum > maxVal {
+            maxVal = sum
+        }
+    }
+    return maxVal
+}
+
+func arrayManipulation2(n: Int, queries: [[Int]]) -> Int {
+
+    for i in (0..<queries.count) {
+        let q = queries[i]
+
+    }
+
+    var maxVal = 0
     return maxVal
 }
 
@@ -65,17 +64,17 @@ print(arrayManipulation(n: 10, queries: [
     [6,9,1]
     ]))
 
-//print(arrayManipulation(n: 5, queries: [
-//    [1,2,100],
-//    [2,5,100],
-//    [3,4,100]
-//    ]))
+print(arrayManipulation(n: 5, queries: [
+    [1,2,100],
+    [2,5,100],
+    [3,4,100]
+    ]))
 
-//print(arrayManipulation(n: 5000000, queries: [
-//    [1,2,100],
-//    [2,5,100],
-//    [3,4,100]
-//    ]))
+print(arrayManipulation(n: 5000000, queries: [
+    [1,2,100],
+    [2,5,100],
+    [3,4,100]
+    ]))
 
 //print(arrayManipulation(n: 4000, queries: [
 //    [2250,2540,180674],
