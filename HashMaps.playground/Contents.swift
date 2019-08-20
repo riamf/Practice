@@ -105,7 +105,6 @@ func countTriplets(arr: [Int], r: Int) -> Int {
     for i in (0..<arr.count).reversed() {
         let x = arr[i]
         let xr = x * r
-        let xrr = xr * r
         if let tmp = map2[xr] {
             cnt += tmp
         }
@@ -127,3 +126,64 @@ print(countTriplets(arr: [1, 5,5,25, 125], r: 5))
 print(countTriplets(arr: [1,3,9,9,27,81], r: 3))
 print(countTriplets(arr: [1,27,9,9,3,27,81], r: 3))
 
+
+print("frequency queries")
+func freqQuery(queries: [[Int]]) -> [Int] {
+    var results = [Int]()
+
+    var array = [Int]()
+    var map = [Int: Int]()
+    for q in queries {
+        if q[0] == 1 {
+            map[q[1], default: 0] += 1
+            array.append(q[1])
+        } else if q[0] == 2 {
+            if let _ = map[q[1]] {
+                array.removeAll(where: {$0 == q[1]})
+                if map[q[1]] == 1 {
+                    map.removeValue(forKey: q[1])
+                } else {
+                    map[q[1], default: 0] -= 1
+                }
+            }
+        } else if q[0] == 3 {
+            if let _ = map.first(where: { $0.value == q[1] }) {
+                results.append(1)
+            } else {
+                results.append(0)
+            }
+        }
+    }
+
+    return results
+}
+print(freqQuery(queries: [
+    [1,5],
+    [1 ,6],
+    [3, 2],
+    [1, 10],
+    [1, 10],
+    [1, 6],
+    [2, 5],
+    [3, 2]
+    ]))
+
+print(freqQuery(queries: [
+    [3, 4],
+    [2, 1003],
+    [1, 16],
+    [3 ,1]
+    ]))
+
+print(freqQuery(queries: [
+    [1,3],
+    [2,3],
+    [3,2],
+    [1,4],
+    [1,5],
+    [1,5],
+    [1,4],
+    [3,2],
+    [2,4],
+    [3,2]
+    ]))
