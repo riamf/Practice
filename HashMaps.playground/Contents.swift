@@ -131,23 +131,22 @@ print("frequency queries")
 func freqQuery(queries: [[Int]]) -> [Int] {
     var results = [Int]()
 
-    var array = [Int]()
     var map = [Int: Int]()
+    var frequencies = [Int: Int]()
     for q in queries {
         if q[0] == 1 {
+            var freq = map[q[1], default: 0]
+            frequencies[freq, default: 0] -= 1
             map[q[1], default: 0] += 1
-            array.append(q[1])
+            freq = map[q[1], default: 0]
+            frequencies[freq, default: 0] += 1
         } else if q[0] == 2 {
-            if let _ = map[q[1]] {
-                array.removeAll(where: {$0 == q[1]})
-                if map[q[1]] == 1 {
-                    map.removeValue(forKey: q[1])
-                } else {
-                    map[q[1], default: 0] -= 1
-                }
-            }
+            let count = map[q[1], default:0]
+            map[q[1]] = count - 1
+            frequencies[count, default: 0] -= 1
+            frequencies[count - 1, default: 0] += 1
         } else if q[0] == 3 {
-            if let _ = map.first(where: { $0.value == q[1] }) {
+            if frequencies[q[1], default: 0] > 0 {
                 results.append(1)
             } else {
                 results.append(0)
