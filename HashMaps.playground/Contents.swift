@@ -99,21 +99,31 @@ print(sherlockAndAnagrams(s: "kkkk"))
 
 func countTriplets(arr: [Int], r: Int) -> Int {
 
+    var map1 = [Int: Int]()
+    var map2 = [Int: Int]()
     var cnt = 0
-    for i in (0..<arr.count) {
+    for i in (0..<arr.count).reversed() {
         let x = arr[i]
-        for j in (i+1..<arr.count) {
-            if arr[j] == x * r {
-                let y = arr[j]
-                for k in (j+1..<arr.count) {
-                    if arr[k] == y * r {
-                        cnt += 1
-                    }
-                }
-            }
+        let xr = x * r
+        let xrr = xr * r
+        if let tmp = map2[xr] {
+            cnt += tmp
         }
+
+        if let tmp = map1[xr] {
+            map2[x, default: 0] += tmp
+        }
+
+        map1[x, default: 0] += 1
+
     }
+
     return cnt
 }
 
-print(countTriplets(arr: [1,4,16,64], r: 4))
+print("triplets")
+print(countTriplets(arr: [1,4, 4,16, 16,64], r: 4))
+print(countTriplets(arr: [1, 5,5,25, 125], r: 5))
+print(countTriplets(arr: [1,3,9,9,27,81], r: 3))
+print(countTriplets(arr: [1,27,9,9,3,27,81], r: 3))
+
