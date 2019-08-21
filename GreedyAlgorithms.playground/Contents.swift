@@ -46,3 +46,27 @@ func luckBalance(k: Int, contests: [[Int]]) -> Int {
 }
 
 print(luckBalance(k: 3, contests: [[5,1],[2,1],[1,1],[8,1],[10,0],[5,0]]))
+
+print("getMinimumCost")
+
+func getMinimumCost(k: Int, c: [Int]) -> Int {
+
+    var purchases = [Int: [Int]]()
+    var cSorted = c.sorted()
+    var peopleQueue = (0..<k).map({$0})
+    while !cSorted.isEmpty {
+        let person = peopleQueue.removeLast()
+        let flowerPrice = cSorted.removeLast()
+        purchases[person, default: []].append((purchases[person, default: []].count + 1 ) * flowerPrice)
+        peopleQueue.insert(person, at: 0)
+    }
+    var sum = 0
+    for (_, v) in purchases {
+        sum += v.reduce(0, +)
+    }
+    return sum
+}
+
+print(getMinimumCost(k: 3, c: [2,5,6]))
+print(getMinimumCost(k: 2, c: [2,5,6]))
+print(getMinimumCost(k: 3, c: [1,3,5,7,9]))
