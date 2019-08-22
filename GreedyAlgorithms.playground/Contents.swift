@@ -70,3 +70,45 @@ func getMinimumCost(k: Int, c: [Int]) -> Int {
 print(getMinimumCost(k: 3, c: [2,5,6]))
 print(getMinimumCost(k: 2, c: [2,5,6]))
 print(getMinimumCost(k: 3, c: [1,3,5,7,9]))
+
+print("maxMin")
+
+func maxMin(k: Int, arr: [Int]) -> Int {
+    let sorted =  arr.sorted()
+
+    var minimum = sorted[k - 1] - sorted[0]
+    for i in (1..<sorted.count - k + 1) {
+        minimum = min(sorted[i + k - 1] - sorted[i], minimum)
+    }
+
+    return minimum
+}
+
+print(maxMin(k: 3,
+             arr: [10,
+    100,
+    300,
+    200,
+    1000,
+    20,
+    30]))
+
+print(maxMin(k: 4,
+             arr: [1,
+                2,
+                3,
+                4,
+                10,
+                20,
+                30,
+                40,
+                100,
+                200]))
+
+print(maxMin(k: 2,
+             arr: [1,
+                2,
+                1,
+                2,
+                1
+]))

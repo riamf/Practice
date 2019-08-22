@@ -82,3 +82,68 @@ print(isValid(s: "aabbccddeefghi"))
 print(isValid(s: "aabbcd"))
 print(isValid(s: "abbccc"))
 print(isValid(s:"ebhcgicceggecgdcibbeicigehhebabiehbdgaeaigihghbhigihfebgabicbgfhhedgbfehiahchcecedffhccebifcbdfcfaecicafahfiecceeaabbecfhgbfifabbffadcieeaiidddhfdeccaedbgcfdehbadihheieidgcfbdiiicgahebfbbdfeffegbdhgdagefhbgafaabfghdcbfdhabhfahbdhgifbghhafcieachcbeabccbiigdcfegcccfafehegbiecbdhabcffggiifaabfagbfdfbfacdcafabccgibiidgabiabigbgbbaideeagaaffcddhieicehhchfedfgbgbfhgedhacegaieeedggacbbgadeibbbcdhbabbieibcfbhgdbbiecdhbffaghhchhddcihgdgbgdcfgfggeaahffgiddeadgcegaiddhhdgagdidgacafececiebeigcbdfaedibbgbhciihcdifbacdagfbcefifefchhddadeaiegbfaidbeebiefghfghhdabdeegabagfbbdgbeaiiigeaadhbgebedddfihagdeiccdbcfchgadhgfaidaebfabbagdghebgagbfhfbgeagdgecbhfchebdgafceaffabagedbhcgcedaecdbiifefchcbgfbbibhiahchhfadffeacfbgeigaccedadaafhcieficdfhfheibfdhbgbfhhdfcghabacggchchbdaigbcihhdbifcdeggicgacehebadbdaibhdciefdgfhfeggdhgcaeeeidfebbaicgagcaiachffhadbddhhdbcehciagfdgeadidfcaaiafeadefbbbaidgiagbeacchbdaifgccgcfigefcachiiggbghfhbifciafgfigaabidhdgffcbgicbidibacbgfhddafbegdaagbhddceeifecciddigfiehdbdabahgaechffidebhicfcciahhchebdbei"))
+
+
+
+print("substrCount")
+
+extension String {
+    func substring(range: ClosedRange<Int>) -> String {
+        var res = ""
+        for i in range {
+            res += self[i]
+        }
+        return res
+    }
+}
+
+func substrCount(n: Int, s: String) -> Int {
+    guard !s.isEmpty else { return 0 }
+
+    var leftIndex = 0
+    var sameCount = 1
+    var count = 0
+    var strings = [s[0]]
+    for i in (1..<s.count) {
+        let current = s[i]
+        if current != s[leftIndex] {
+            if sameCount > 1 {
+                count += 1
+            }
+            leftIndex = i
+            sameCount = 1
+        } else {
+            sameCount += 1
+        }
+        if i == s.count - 1 && sameCount > 1 {
+            var f = 1
+            if sameCount > 1 {
+                for n in (1..<sameCount) {
+                    f = f * n
+                }
+            }
+            count += f
+        }
+
+        if i-1 >= 0 && i+1 < s.count && s[i] != s[i-1] && s[i-1] == s[i+1] {
+            var f = 1
+            if sameCount > 1 {
+                for n in (1..<sameCount) {
+                    f = f * n
+                }
+            }
+            count += f
+        }
+    }
+
+    return s.count + count
+}
+
+var str = "mnonopoo"
+print(substrCount(n: str.count, s: str))
+str = "asasd"
+print(substrCount(n: str.count, s: str))
+str = "abcbaba"
+print(substrCount(n: str.count, s: str))
+str = "aaaa"
+print(substrCount(n: str.count, s: str))
