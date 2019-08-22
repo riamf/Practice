@@ -108,7 +108,11 @@ func substrCount(n: Int, s: String) -> Int {
         let current = s[i]
         if current != s[leftIndex] {
             if sameCount > 1 {
-                count += 1
+                var f = 1
+                for n in (1..<sameCount) {
+                    f = f * n
+                }
+                count += f
             }
             leftIndex = i
             sameCount = 1
@@ -126,13 +130,7 @@ func substrCount(n: Int, s: String) -> Int {
         }
 
         if i-1 >= 0 && i+1 < s.count && s[i] != s[i-1] && s[i-1] == s[i+1] {
-            var f = 1
-            if sameCount > 1 {
-                for n in (1..<sameCount) {
-                    f = f * n
-                }
-            }
-            count += f
+            count += 1
         }
     }
 
@@ -146,4 +144,6 @@ print(substrCount(n: str.count, s: str))
 str = "abcbaba"
 print(substrCount(n: str.count, s: str))
 str = "aaaa"
+print(substrCount(n: str.count, s: str))
+str = "aaaabccc"
 print(substrCount(n: str.count, s: str))
