@@ -103,7 +103,6 @@ func substrCount(n: Int, s: String) -> Int {
     var leftIndex = 0
     var sameCount = 1
     var count = 0
-    var strings = [s[0]]
     for i in (1..<s.count) {
         let current = s[i]
         if current != s[leftIndex] {
