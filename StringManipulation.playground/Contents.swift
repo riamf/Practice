@@ -100,41 +100,33 @@ extension String {
 func substrCount(n: Int, s: String) -> Int {
     guard !s.isEmpty else { return 0 }
 
-    var leftIndex = 0
-    var sameCount = 1
-    var count = 0
-    var pairs = [(String, Int)]()
-    for i in (0..<s.count) {
-        let current = s[i]
-        if let last = pairs.last, last.0 == current {
+    var pairs = [(Character, Int)]()
+    for ch in s {
+        if let last = pairs.last, last.0 == ch {
             pairs.popLast()
-            pairs.append((last.0, last.1 + 1))
+            pairs.append((ch, last.1 + 1))
         } else {
-            pairs.append((current, 1))
+            pairs.append((ch, 1))
         }
     }
 
-    if pairs.count < 3 {
-        for p in pairs {
-            count += (p.1 * (p.1+1)) / 2
-        }
-    } else {
-        var first = 0
-        var middle = 1
-        count += (pairs[first].1 * (pairs[first].1+1)) / 2
-        count += (pairs[middle].1 * (pairs[middle].1+1)) / 2
-        for last in (2..<pairs.count) {
-            if pairs[first].0 == pairs[last].0 && pairs[middle].1 == 1 && pairs[first].1 <= pairs[last].1 {
-                count += 1
-            }
-            count += (pairs[last].1 * (pairs[last].1+1)) / 2
 
-            first += 1
-            middle += 1
+    var cnt = 0
+
+    for p in pairs {
+        cnt += Int(p.1 * (p.1 + 1) / 2)
+    }
+
+    guard pairs.count > 2 else {
+        return cnt
+    }
+    for i in (1..<(pairs.count - 1)) {
+        if pairs[i - 1].0 == pairs[i + 1].0, pairs[i].1 == 1 {
+            cnt += min(pairs[i - 1].1, pairs[i + 1].1)
         }
     }
 
-    return count
+    return cnt
 }
 
 var str = "mnonopoo"
