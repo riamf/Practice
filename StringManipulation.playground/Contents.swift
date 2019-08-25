@@ -103,37 +103,38 @@ func substrCount(n: Int, s: String) -> Int {
     var leftIndex = 0
     var sameCount = 1
     var count = 0
-    for i in (1..<s.count) {
+    var pairs = [(String, Int)]()
+    for i in (0..<s.count) {
         let current = s[i]
-        if current != s[leftIndex] {
-            if sameCount > 1 {
-                var f = 1
-                for n in (1..<sameCount) {
-                    f = f * n
-                }
-                count += f
-            }
-            leftIndex = i
-            sameCount = 1
+        if let last = pairs.last, last.0 == current {
+            pairs.popLast()
+            pairs.append((last.0, last.1 + 1))
         } else {
-            sameCount += 1
-        }
-        if i == s.count - 1 && sameCount > 1 {
-            var f = 1
-            if sameCount > 1 {
-                for n in (1..<sameCount) {
-                    f = f * n
-                }
-            }
-            count += f
-        }
-
-        if i-1 >= 0 && i+1 < s.count && s[i] != s[i-1] && s[i-1] == s[i+1] {
-            count += 1
+            pairs.append((current, 1))
         }
     }
 
-    return s.count + count
+    if pairs.count < 3 {
+        for p in pairs {
+            count += (p.1 * (p.1+1)) / 2
+        }
+    } else {
+        var first = 0
+        var middle = 1
+        count += (pairs[first].1 * (pairs[first].1+1)) / 2
+        count += (pairs[middle].1 * (pairs[middle].1+1)) / 2
+        for last in (2..<pairs.count) {
+            if pairs[first].0 == pairs[last].0 && pairs[middle].1 == 1 && pairs[first].1 <= pairs[last].1 {
+                count += 1
+            }
+            count += (pairs[last].1 * (pairs[last].1+1)) / 2
+
+            first += 1
+            middle += 1
+        }
+    }
+
+    return count
 }
 
 var str = "mnonopoo"
@@ -144,5 +145,5 @@ str = "abcbaba"
 print(substrCount(n: str.count, s: str))
 str = "aaaa"
 print(substrCount(n: str.count, s: str))
-str = "aaaabccc"
+str = "aaaa"
 print(substrCount(n: str.count, s: str))
