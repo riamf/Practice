@@ -139,3 +139,26 @@ str = "aaaa"
 print(substrCount(n: str.count, s: str))
 str = "aaaa"
 print(substrCount(n: str.count, s: str))
+
+
+func commonChild(s1: String, s2: String) -> Int {
+
+    var C = Array<Array<Int>>(repeating: Array<Int>(repeating: 0, count: s1.count+1), count: s2.count+1)
+    for (i, ch1) in s1.enumerated() {
+        for (j, ch2) in s2.enumerated() {
+            if ch1 == ch2 {
+                C[i+1][j+1] = C[i][j] + 1
+            } else {
+                C[i+1][j+1] = max(C[i+1][j], C[i][j+1])
+            }
+        }
+    }
+
+    return C[s2.count][s1.count]
+}
+
+print("\ncommonChild\n")
+print(commonChild(s1: "HARRY", s2: "SALLY"))
+print(commonChild(s1: "AA", s2: "BB"))
+print(commonChild(s1: "SHINCHAN", s2: "NOHARAAA"))
+print(commonChild(s1: "ABCDEF", s2: "FBDAMN"))
