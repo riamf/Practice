@@ -29,7 +29,6 @@ func pairs(k: Int, arr: [Int]) -> Int {
     var map2 = [Int: Int]()
     var pairs = [(Int, Int)]()
     for val in arr {
-
         if let found = map1[val] {
             pairs.append((found, val))
         }
@@ -46,3 +45,33 @@ func pairs(k: Int, arr: [Int]) -> Int {
 
 print(pairs(k: 2, arr: [1,5,3,4,2]))
 print(pairs(k: 1, arr: [1,2,3,4]))
+
+print("triplets")
+
+func triplets(a: [Int], b: [Int], c: [Int]) -> Int {
+
+    var count = 0
+
+    let sortedA = NSOrderedSet(array: a.sorted())
+    let sortedB = NSOrderedSet(array: b.sorted())
+    let sortedC = NSOrderedSet(array: c.sorted())
+    var ai = 0
+    var ci = 0
+
+    for vb in sortedB {
+        while ai < sortedA.count && (sortedA[ai] as! Int) <= (vb as! Int) {
+            ai += 1
+        }
+        while ci < sortedC.count && (sortedC[ci] as! Int) <= (vb as! Int) {
+            ci += 1
+        }
+        count += ai * ci
+
+    }
+
+    return count
+}
+
+print(triplets(a: [3,7,5], b: [3,6], c: [4,6,9]))
+print(triplets(a: [3,7,5], b: [3,6], c: [4,6,9]))
+print(triplets(a: [1,4,5], b: [2,3,3], c: [1,2,3]))
