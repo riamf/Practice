@@ -75,3 +75,30 @@ func triplets(a: [Int], b: [Int], c: [Int]) -> Int {
 print(triplets(a: [3,7,5], b: [3,6], c: [4,6,9]))
 print(triplets(a: [3,7,5], b: [3,6], c: [4,6,9]))
 print(triplets(a: [1,4,5], b: [2,3,3], c: [1,2,3]))
+
+print("minTime")
+
+func minTime(machines: [Int], goal: Int) -> Int {
+
+    var high = machines.max()! * goal
+    var low = 1
+
+    while low < high {
+        var mid = Int(floor((Double(high) + Double(low)) / 2.0))
+        var production = 0
+        for i in (0..<machines.count) {
+            production += Int(Double(mid) / Double(machines[i]))
+        }
+        if production < goal {
+            low = mid + 1
+        } else {
+            high = mid
+        }
+    }
+
+    return high
+}
+
+print(minTime(machines: [2,3,2], goal: 10))
+
+
