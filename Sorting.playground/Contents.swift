@@ -130,3 +130,79 @@ func countSort(array: [Int], r: Int) -> [Int] {
 //print(activityNotifications(expenditure: [10,20,30,40,50], d: 3))
 //print(activityNotifications(expenditure: [2,3,4,2,3,6,8,4,5], d: 5))
 print(activityNotifications(expenditure: [1,2,3,4,4], d: 4))
+
+func mergeSort(arr: [Int]) -> [Int] {
+    guard arr.count > 1 else {
+        return arr
+    }
+
+    let mid = Int(floor(Double(arr.count) / 2.0))
+    var L = Array(arr[0..<mid])
+    var R = Array(arr[mid..<arr.count])
+
+    L = mergeSort(arr: L)
+    R = mergeSort(arr: R)
+    var c = [Int]()
+
+    var (i, j) = (0, 0)
+    while i < L.count && j < R.count {
+        if L[i] < R[j] {
+            c.append(L[i])
+            i += 1
+        } else {
+            c.append(R[j])
+            j += 1
+        }
+    }
+
+    c += Array(L[i..<L.count])
+    c += Array(R[j..<R.count])
+
+    return c
+}
+
+var sample = [1,5,2,3,6,67,12,132]
+print(mergeSort(arr: sample))
+
+func countInversions(arr: [Int]) -> Int {
+    let (arr, inversions) = sortAndCountInversions(arr: arr)
+    return inversions
+}
+
+func sortAndCountInversions(arr: [Int]) -> ([Int], Int) {
+    guard arr.count > 1 else {
+        return (arr, 0)
+    }
+
+    let mid = Int(floor(Double(arr.count) / 2.0))
+    var L = Array(arr[0..<mid])
+    var R = Array(arr[mid..<arr.count])
+
+    var (La, Li) = sortAndCountInversions(arr: L)
+    var (Ra, Ri) = sortAndCountInversions(arr: R)
+    L = La
+    R = Ra
+    var c = [Int]()
+
+    var count = Li + Ri
+    var (i, j) = (0, 0)
+    while i < L.count && j < R.count {
+        if L[i] <= R[j] {
+            c.append(L[i])
+            i += 1
+        } else {
+            c.append(R[j])
+            j += 1
+            count += (L.count - i)
+        }
+    }
+
+    c += Array(L[i..<L.count])
+    c += Array(R[j..<R.count])
+
+    return (c, count)
+}
+
+print("countInversions \n")
+print(countInversions(arr: [1, 1,1,2,2]))
+print(countInversions(arr: [2,1,3,1,2]))
