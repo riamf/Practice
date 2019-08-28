@@ -90,5 +90,29 @@ func perform(queries: [[Int]]) {
             print(val)
         }
     }
-
 }
+
+print("largest rectangle")
+
+func largestRectangle(h: [Int]) -> Int {
+    var stack = [(Int, Int)]()
+    var ans = h.count
+    var hc = h
+    hc.append(0)
+    for i in (0..<hc.count) {
+        var left = i
+        while !stack.isEmpty && stack.last!.0 >= hc[i] {
+            let last = stack.popLast()!
+            left = last.1
+            ans = max(ans, hc[i] * (i + 1 - last.1))
+            ans = max(ans, last.0 * (i - last.1))
+        }
+        stack.append((hc[i], left))
+    }
+    return ans
+}
+
+print(largestRectangle(h: [1,2,3,4,5]))
+print(largestRectangle(h: [2,3,2]))
+print(largestRectangle(h: [8979,4570,6436,5083,7780,3269,5400,7579,2324,2116]))
+
