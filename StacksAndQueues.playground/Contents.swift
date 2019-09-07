@@ -116,3 +116,80 @@ print(largestRectangle(h: [1,2,3,4,5]))
 print(largestRectangle(h: [2,3,2]))
 print(largestRectangle(h: [8979,4570,6436,5083,7780,3269,5400,7579,2324,2116]))
 
+func riddle(arr: [Int]) -> [Int] {
+
+    var result = Array<Int>(repeating: 0, count: arr.count + 1)
+    var a = [Int: [Int]]()
+
+    for i in (0..<arr.count) {
+        for e in ((i+1)...arr.count) {
+            var window = Array(arr[i..<e])
+            a[e-i, default: []].append(window.min()!)
+        }
+    }
+
+    for (k, v) in a {
+        let max = v.max()!
+        result[k] = max
+    }
+
+    return Array(result[1..<result.count])
+}
+
+print(riddle(arr: [2,6,1,12]))
+
+
+print("text editor")
+
+extension String {
+    subscript(i: Int) -> String {
+        let idx = index(startIndex, offsetBy: i)
+        return "\(self[idx])"
+    }
+}
+
+
+func textEditor(queries: [[String]]) -> [String] {
+    var text = ""
+    var stackStatus = [String]()
+
+    var printRes = [String]()
+
+    for q in queries {
+        let opType = q[0]
+        if opType == "1" {
+            let str = q[1]
+            stackStatus.append(text)
+            text += str
+        }
+        if opType == "2" {
+            let k = Int(q[1])!
+            stackStatus.append(text)
+            text = String(text[text.startIndex..<text.index(text.startIndex,
+                                                            offsetBy: text.count - k)])
+        }
+
+        if opType == "3" {
+            var k = Int(q[1])!
+            printRes.append(text[k-1])
+        }
+
+        if opType == "4" {
+            text = stackStatus.popLast()!
+        }
+    }
+    return printRes
+}
+
+let res = textEditor(queries: [
+    ["1", "abc"],
+    ["3","3"],
+    ["2","3"],
+    ["1","xy"],
+    ["3","2"],
+    ["4"],
+    ["4"],
+    ["3","1"]
+    ])
+
+print(res)
