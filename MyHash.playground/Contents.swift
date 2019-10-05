@@ -20,7 +20,7 @@ struct HashTable<Key: Hashable, Value>: CustomStringConvertible {
         for b in buckets {
             if !b.isEmpty {
                 res += "\(b[0].key): "
-                for v in b where v != nil {
+                for v in b {
                     res += "\(v.value!)"
                 }
                 res += "\n"
